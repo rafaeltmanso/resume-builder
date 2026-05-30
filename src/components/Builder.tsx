@@ -21,18 +21,18 @@ export default function Builder() {
 
   const loadSample = useCallback(() => {
     setResumeData(sampleData);
-  }, []);
+  }, [setResumeData]);
 
   const clearAll = useCallback(() => {
     setResumeData(defaultResumeData);
-  }, []);
+  }, [setResumeData]);
 
   const updatePersonalInfo = useCallback((field: string, value: string) => {
     setResumeData(prev => ({
       ...prev,
       personalInfo: { ...prev.personalInfo, [field]: value }
     }));
-  }, []);
+  }, [setResumeData]);
 
   const addExperience = useCallback(() => {
     const newExp = {
@@ -45,7 +45,7 @@ export default function Builder() {
       currentlyWorking: false,
     };
     setResumeData(prev => ({ ...prev, experience: [...prev.experience, newExp] }));
-  }, []);
+  }, [setResumeData]);
 
   const updateExperience = useCallback((id: string, field: string, value: string | boolean) => {
     setResumeData(prev => ({
@@ -54,14 +54,14 @@ export default function Builder() {
         exp.id === id ? { ...exp, [field]: value } : exp
       )
     }));
-  }, []);
+  }, [setResumeData]);
 
   const removeExperience = useCallback((id: string) => {
     setResumeData(prev => ({
       ...prev,
       experience: prev.experience.filter(exp => exp.id !== id)
     }));
-  }, []);
+  }, [setResumeData]);
 
   const moveExperience = useCallback((fromIndex: number, toIndex: number) => {
     setResumeData(prev => {
@@ -70,7 +70,7 @@ export default function Builder() {
       items.splice(toIndex, 0, moved);
       return { ...prev, experience: items };
     });
-  }, []);
+  }, [setResumeData]);
 
   const addEducation = useCallback(() => {
     const newEdu = {
@@ -82,7 +82,7 @@ export default function Builder() {
       endDate: '',
     };
     setResumeData(prev => ({ ...prev, education: [...prev.education, newEdu] }));
-  }, []);
+  }, [setResumeData]);
 
   const updateEducation = useCallback((id: string, field: string, value: string) => {
     setResumeData(prev => ({
@@ -91,14 +91,14 @@ export default function Builder() {
         edu.id === id ? { ...edu, [field]: value } : edu
       )
     }));
-  }, []);
+  }, [setResumeData]);
 
   const removeEducation = useCallback((id: string) => {
     setResumeData(prev => ({
       ...prev,
       education: prev.education.filter(edu => edu.id !== id)
     }));
-  }, []);
+  }, [setResumeData]);
 
   const moveEducation = useCallback((fromIndex: number, toIndex: number) => {
     setResumeData(prev => {
@@ -107,7 +107,7 @@ export default function Builder() {
       items.splice(toIndex, 0, moved);
       return { ...prev, education: items };
     });
-  }, []);
+  }, [setResumeData]);
 
   const addSkill = useCallback(() => {
     const newSkill = {
@@ -116,7 +116,7 @@ export default function Builder() {
       level: 'intermediate' as const,
     };
     setResumeData(prev => ({ ...prev, skills: [...prev.skills, newSkill] }));
-  }, []);
+  }, [setResumeData]);
 
   const updateSkill = useCallback((id: string, field: string, value: string) => {
     setResumeData(prev => ({
@@ -125,14 +125,14 @@ export default function Builder() {
         skill.id === id ? { ...skill, [field]: value } : skill
       )
     }));
-  }, []);
+  }, [setResumeData]);
 
   const removeSkill = useCallback((id: string) => {
     setResumeData(prev => ({
       ...prev,
       skills: prev.skills.filter(skill => skill.id !== id)
     }));
-  }, []);
+  }, [setResumeData]);
 
   const moveSkill = useCallback((fromIndex: number, toIndex: number) => {
     setResumeData(prev => {
@@ -141,7 +141,38 @@ export default function Builder() {
       items.splice(toIndex, 0, moved);
       return { ...prev, skills: items };
     });
-  }, []);
+  }, [setResumeData]);
+
+  const exportData = useCallback(() => {
+    const blob = new Blob([JSON.stringify(resumeData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${resumeData.personalInfo.fullName || 'resume'}-data.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [resumeData]);
+
+  const importData = useCallback(() => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const data = JSON.parse(event.target?.result as string) as ResumeData;
+          setResumeData(data);
+        } catch {
+          alert('Invalid JSON file. Please select a valid resume data file.');
+        }
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  }, [setResumeData]);
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors">
@@ -165,6 +196,23 @@ export default function Builder() {
               className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
               Clear
+            </button>
+            <div className="w-px h-5 bg-gray-300 dark:bg-gray-600" />
+            <button
+              type="button"
+              onClick={importData}
+              className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              title="Import resume data from JSON"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+            </button>
+            <button
+              type="button"
+              onClick={exportData}
+              className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              title="Export resume data as JSON"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
             </button>
             <button
               type="button"
