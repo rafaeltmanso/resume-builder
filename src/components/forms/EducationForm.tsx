@@ -1,16 +1,18 @@
 import type { Education } from '../../types/resume';
+import SortableList from '../DraggableList';
 
 interface Props {
   education: Education[];
   onAdd: () => void;
   onUpdate: (id: string, field: string, value: string) => void;
   onRemove: (id: string) => void;
+  onMove: (fromIndex: number, toIndex: number) => void;
 }
 
 const inputClass = "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent text-sm transition-colors";
 const labelClass = "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5";
 
-export default function EducationForm({ education, onAdd, onUpdate, onRemove }: Props) {
+export default function EducationForm({ education, onAdd, onUpdate, onRemove, onMove }: Props) {
   return (
     <section className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-4 sm:p-5">
       <div className="flex items-center justify-between mb-5">
@@ -27,79 +29,81 @@ export default function EducationForm({ education, onAdd, onUpdate, onRemove }: 
           Add
         </button>
       </div>
-      <div className="space-y-4">
-        {education.map((edu) => (
-          <div key={edu.id} className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900/50 space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">Education #{education.indexOf(edu) + 1}</span>
-              <button
-                type="button"
-                onClick={() => onRemove(edu.id)}
-                className="text-xs text-red-500 hover:text-red-600 font-medium"
-              >
-                Remove
-              </button>
-            </div>
-            <div>
-              <label className={labelClass}>Institution</label>
-              <input
-                type="text"
-                placeholder="e.g. Stanford University"
-                value={edu.institution}
-                onChange={e => onUpdate(edu.id, 'institution', e.target.value)}
-                className={inputClass}
-              />
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {education.length === 0 ? (
+        <p className="text-sm text-gray-400 text-center py-6">No education added yet. Click "Add" to start.</p>
+      ) : (
+        <SortableList
+          items={education}
+          onReorder={onMove}
+          keyExtractor={e => e.id}
+          renderItem={(edu) => (
+            <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900/50 space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">Education #{education.indexOf(edu) + 1}</span>
+                <button
+                  type="button"
+                  onClick={() => onRemove(edu.id)}
+                  className="text-xs text-red-500 hover:text-red-600 font-medium"
+                >
+                  Remove
+                </button>
+              </div>
               <div>
-                <label className={labelClass}>Degree</label>
+                <label className={labelClass}>Institution</label>
                 <input
                   type="text"
-                  placeholder="e.g. B.S., M.S., Ph.D."
-                  value={edu.degree}
-                  onChange={e => onUpdate(edu.id, 'degree', e.target.value)}
+                  placeholder="e.g. Stanford University"
+                  value={edu.institution}
+                  onChange={e => onUpdate(edu.id, 'institution', e.target.value)}
                   className={inputClass}
                 />
               </div>
-              <div>
-                <label className={labelClass}>Field of Study</label>
-                <input
-                  type="text"
-                  placeholder="e.g. Computer Science"
-                  value={edu.field}
-                  onChange={e => onUpdate(edu.id, 'field', e.target.value)}
-                  className={inputClass}
-                />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className={labelClass}>Degree</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. B.S., M.S., Ph.D."
+                    value={edu.degree}
+                    onChange={e => onUpdate(edu.id, 'degree', e.target.value)}
+                    className={inputClass}
+                  />
+                </div>
+                <div>
+                  <label className={labelClass}>Field of Study</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Computer Science"
+                    value={edu.field}
+                    onChange={e => onUpdate(edu.id, 'field', e.target.value)}
+                    className={inputClass}
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className={labelClass}>Start Date</label>
+                  <input
+                    type="month"
+                    value={edu.startDate}
+                    onChange={e => onUpdate(edu.id, 'startDate', e.target.value)}
+                    className={inputClass}
+                  />
+                </div>
+                <div>
+                  <label className={labelClass}>End Date</label>
+                  <input
+                    type="month"
+                    value={edu.endDate}
+                    onChange={e => onUpdate(edu.id, 'endDate', e.target.value)}
+                    className={inputClass}
+                  />
+                </div>
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className={labelClass}>Start Date</label>
-                <input
-                  type="month"
-                  value={edu.startDate}
-                  onChange={e => onUpdate(edu.id, 'startDate', e.target.value)}
-                  className={inputClass}
-                />
-              </div>
-              <div>
-                <label className={labelClass}>End Date</label>
-                <input
-                  type="month"
-                  value={edu.endDate}
-                  onChange={e => onUpdate(edu.id, 'endDate', e.target.value)}
-                  className={inputClass}
-                />
-              </div>
-            </div>
-          </div>
-        ))}
-        {education.length === 0 && (
-          <p className="text-sm text-gray-400 text-center py-6">
-            No education added yet. Click "Add" to start.
-          </p>
-        )}
-      </div>
+          )}
+        />
+      )}
     </section>
   );
 }

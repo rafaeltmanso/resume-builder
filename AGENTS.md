@@ -24,6 +24,7 @@ npm run preview  # Preview production build locally
 - `src/components/templates/*.tsx` - Three resume templates: Minimal, Modern, Professional
 - `src/components/forms/*.tsx` - Input forms (PersonalInfo, Experience, Education, Skills)
 - `src/components/DownloadButton.tsx` - PDF/HTML export with multi-page support
+- `src/components/DraggableList.tsx` - Generic sortable list using native HTML5 drag-and-drop API
 - `src/hooks/useTheme.ts` - Dark mode with system preference fallback
 - `src/utils/sampleData.ts` - Demo data for quick testing
 

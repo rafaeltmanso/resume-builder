@@ -62,6 +62,15 @@ export default function Builder() {
     }));
   }, []);
 
+  const moveExperience = useCallback((fromIndex: number, toIndex: number) => {
+    setResumeData(prev => {
+      const items = [...prev.experience];
+      const [moved] = items.splice(fromIndex, 1);
+      items.splice(toIndex, 0, moved);
+      return { ...prev, experience: items };
+    });
+  }, []);
+
   const addEducation = useCallback(() => {
     const newEdu = {
       id: crypto.randomUUID(),
@@ -90,6 +99,15 @@ export default function Builder() {
     }));
   }, []);
 
+  const moveEducation = useCallback((fromIndex: number, toIndex: number) => {
+    setResumeData(prev => {
+      const items = [...prev.education];
+      const [moved] = items.splice(fromIndex, 1);
+      items.splice(toIndex, 0, moved);
+      return { ...prev, education: items };
+    });
+  }, []);
+
   const addSkill = useCallback(() => {
     const newSkill = {
       id: crypto.randomUUID(),
@@ -113,6 +131,15 @@ export default function Builder() {
       ...prev,
       skills: prev.skills.filter(skill => skill.id !== id)
     }));
+  }, []);
+
+  const moveSkill = useCallback((fromIndex: number, toIndex: number) => {
+    setResumeData(prev => {
+      const items = [...prev.skills];
+      const [moved] = items.splice(fromIndex, 1);
+      items.splice(toIndex, 0, moved);
+      return { ...prev, skills: items };
+    });
   }, []);
 
   return (
@@ -178,6 +205,7 @@ export default function Builder() {
               onAdd={addExperience}
               onUpdate={updateExperience}
               onRemove={removeExperience}
+              onMove={moveExperience}
             />
 
             <EducationForm
@@ -185,6 +213,7 @@ export default function Builder() {
               onAdd={addEducation}
               onUpdate={updateEducation}
               onRemove={removeEducation}
+              onMove={moveEducation}
             />
 
             <SkillsForm
@@ -192,6 +221,7 @@ export default function Builder() {
               onAdd={addSkill}
               onUpdate={updateSkill}
               onRemove={removeSkill}
+              onMove={moveSkill}
             />
           </div>
         </div>

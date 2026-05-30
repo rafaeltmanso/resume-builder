@@ -1,10 +1,12 @@
 import type { Skill } from '../../types/resume';
+import SortableList from '../DraggableList';
 
 interface Props {
   skills: Skill[];
   onAdd: () => void;
   onUpdate: (id: string, field: string, value: string) => void;
   onRemove: (id: string) => void;
+  onMove: (fromIndex: number, toIndex: number) => void;
 }
 
 const inputClass = "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent text-sm transition-colors";
@@ -15,7 +17,7 @@ const levelColors: Record<string, string> = {
   advanced: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300',
 };
 
-export default function SkillsForm({ skills, onAdd, onUpdate, onRemove }: Props) {
+export default function SkillsForm({ skills, onAdd, onUpdate, onRemove, onMove }: Props) {
   return (
     <section className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-4 sm:p-5">
       <div className="flex items-center justify-between mb-5">
@@ -32,44 +34,46 @@ export default function SkillsForm({ skills, onAdd, onUpdate, onRemove }: Props)
           Add
         </button>
       </div>
-      <div className="space-y-2">
-        {skills.map((skill) => (
-          <div key={skill.id} className="flex items-center gap-2 p-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900/50">
-            <input
-              type="text"
-              placeholder="Skill name"
-              value={skill.name}
-              onChange={e => onUpdate(skill.id, 'name', e.target.value)}
-              className={inputClass + " flex-1"}
-            />
-            <span className={"px-2 py-1 text-xs font-medium rounded-full whitespace-nowrap " + (levelColors[skill.level] || '')}>
-              {skill.level}
-            </span>
-            <select
-              value={skill.level}
-              onChange={e => onUpdate(skill.id, 'level', e.target.value)}
-              className={inputClass + " w-auto"}
-            >
-              <option value="beginner">Beginner</option>
-              <option value="intermediate">Intermediate</option>
-              <option value="advanced">Advanced</option>
-            </select>
-            <button
-              type="button"
-              onClick={() => onRemove(skill.id)}
-              className="p-1.5 text-gray-400 hover:text-red-500 transition-colors"
-              title="Remove skill"
-            >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
-          </div>
-        ))}
-        {skills.length === 0 && (
-          <p className="text-sm text-gray-400 text-center py-6">
-            No skills added yet. Click "Add" to start.
-          </p>
-        )}
-      </div>
+      {skills.length === 0 ? (
+        <p className="text-sm text-gray-400 text-center py-6">No skills added yet. Click "Add" to start.</p>
+      ) : (
+        <SortableList
+          items={skills}
+          onReorder={onMove}
+          keyExtractor={s => s.id}
+          renderItem={(skill) => (
+            <div className="flex items-center gap-2 p-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900/50">
+              <input
+                type="text"
+                placeholder="Skill name"
+                value={skill.name}
+                onChange={e => onUpdate(skill.id, 'name', e.target.value)}
+                className={inputClass + " flex-1"}
+              />
+              <span className={"px-2 py-1 text-xs font-medium rounded-full whitespace-nowrap " + (levelColors[skill.level] || '')}>
+                {skill.level}
+              </span>
+              <select
+                value={skill.level}
+                onChange={e => onUpdate(skill.id, 'level', e.target.value)}
+                className={inputClass + " w-auto"}
+              >
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+              </select>
+              <button
+                type="button"
+                onClick={() => onRemove(skill.id)}
+                className="p-1.5 text-gray-400 hover:text-red-500 transition-colors"
+                title="Remove skill"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+          )}
+        />
+      )}
     </section>
   );
 }
