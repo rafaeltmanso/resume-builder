@@ -35,7 +35,7 @@ npm run preview  # Preview production build locally
 - Templates receive `ResumeData` and render pure JSX (no external deps)
 - `#resume-preview` div is the capture target for html2canvas
 - Dark mode via `@custom-variant dark (&:where(.dark, .dark *));` in CSS
-- Premium templates (`modern`, `professional`) require `isPremium=true` to unlock
+- Premium templates (`modern`, `professional`) require `isPremium=true` to unlock (test key: `premium-demo`)
 - Free tier: `minimal` template only, download buttons disabled for locked templates
 - PDF multi-page: splits image across pages if content overflows A4
 - HTML export embeds page styles inline for standalone rendering
