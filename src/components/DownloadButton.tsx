@@ -14,7 +14,13 @@ export default function DownloadButton({ templateId, resumeData, isPremium }: Pr
     if (!element) return;
 
     if (format === 'html') {
-      const blob = new Blob([element.innerHTML], { type: 'text/html' });
+      const style = document.querySelector('style')?.innerHTML || '';
+      const htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>${style}</style></head>
+<body>${element.outerHTML}</body>
+</html>`;
+      const blob = new Blob([htmlContent], { type: 'text/html' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -27,34 +33,51 @@ export default function DownloadButton({ templateId, resumeData, isPremium }: Pr
       const pdf = new jsPDF('p', 'mm', 'a4');
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      if (pdfHeight > pdf.internal.pageSize.getHeight()) {
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        let heightLeft = pdfHeight;
+        let position = 0;
+        pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
+        heightLeft -= pageHeight;
+        while (heightLeft > 0) {
+          position -= pageHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
+          heightLeft -= pageHeight;
+        }
+      } else {
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      }
       pdf.save(`${resumeData.personalInfo.fullName || 'resume'}.pdf`);
     }
   };
 
-  if (!isPremium && templateId !== 'minimal') {
-    return (
-      <button
-        disabled
-        className="px-4 py-2 text-sm bg-[var(--border)] text-[var(--text)] rounded cursor-not-allowed"
-      >
-        Premium Only
-      </button>
-    );
-  }
+  const isLocked = !isPremium && templateId !== 'minimal';
 
   return (
     <div className="flex gap-2">
       <button
         onClick={() => handleDownload('pdf')}
-        className="px-4 py-2 text-sm bg-[var(--accent)] text-white rounded hover:opacity-90"
+        disabled={isLocked}
+        className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${
+          isLocked
+            ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed'
+            : 'bg-indigo-500 text-white hover:bg-indigo-600'
+        }`}
       >
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
         PDF
       </button>
       <button
         onClick={() => handleDownload('html')}
-        className="px-4 py-2 text-sm border border-[var(--border)] text-[var(--text-h)] rounded hover:bg-[var(--social-bg)]"
+        disabled={isLocked}
+        className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${
+          isLocked
+            ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed'
+            : 'border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+        }`}
       >
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
         HTML
       </button>
     </div>

@@ -7,72 +7,98 @@ interface Props {
   onRemove: (id: string) => void;
 }
 
+const inputClass = "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent text-sm transition-colors";
+const labelClass = "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5";
+
 export default function EducationForm({ education, onAdd, onUpdate, onRemove }: Props) {
   return (
-    <section className="bg-[var(--bg)] border border-[var(--border)] rounded-lg p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-medium text-[var(--text-h)]">Education</h2>
+    <section className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-4 sm:p-5">
+      <div className="flex items-center justify-between mb-5">
+        <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-2">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 14l9-5-9-5-9 5 9 5z" /><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" /></svg>
+          Education
+        </h2>
         <button
           type="button"
           onClick={onAdd}
-          className="px-3 py-1 text-sm bg-[var(--accent)] text-white rounded hover:opacity-90"
+          className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors"
         >
-          + Add
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+          Add
         </button>
       </div>
       <div className="space-y-4">
         {education.map((edu) => (
-          <div key={edu.id} className="p-3 border border-[var(--border)] rounded space-y-3">
-            <div className="flex justify-end">
+          <div key={edu.id} className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900/50 space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">Education #{education.indexOf(edu) + 1}</span>
               <button
                 type="button"
                 onClick={() => onRemove(edu.id)}
-                className="text-sm text-red-500 hover:text-red-600"
+                className="text-xs text-red-500 hover:text-red-600 font-medium"
               >
                 Remove
               </button>
             </div>
-            <input
-              type="text"
-              placeholder="Institution"
-              value={edu.institution}
-              onChange={e => onUpdate(edu.id, 'institution', e.target.value)}
-              className="w-full px-3 py-2 border border-[var(--border)] rounded bg-[var(--bg)] text-[var(--text-h)]"
-            />
-            <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className={labelClass}>Institution</label>
               <input
                 type="text"
-                placeholder="Degree"
-                value={edu.degree}
-                onChange={e => onUpdate(edu.id, 'degree', e.target.value)}
-                className="w-full px-3 py-2 border border-[var(--border)] rounded bg-[var(--bg)] text-[var(--text-h)]"
-              />
-              <input
-                type="text"
-                placeholder="Field of Study"
-                value={edu.field}
-                onChange={e => onUpdate(edu.id, 'field', e.target.value)}
-                className="w-full px-3 py-2 border border-[var(--border)] rounded bg-[var(--bg)] text-[var(--text-h)]"
+                placeholder="e.g. Stanford University"
+                value={edu.institution}
+                onChange={e => onUpdate(edu.id, 'institution', e.target.value)}
+                className={inputClass}
               />
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <input
-                type="month"
-                placeholder="Start Date"
-                value={edu.startDate}
-                onChange={e => onUpdate(edu.id, 'startDate', e.target.value)}
-                className="w-full px-3 py-2 border border-[var(--border)] rounded bg-[var(--bg)] text-[var(--text-h)]"
-              />
-              <input
-                type="month"
-                placeholder="End Date"
-                value={edu.endDate}
-                onChange={e => onUpdate(edu.id, 'endDate', e.target.value)}
-                className="w-full px-3 py-2 border border-[var(--border)] rounded bg-[var(--bg)] text-[var(--text-h)]"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className={labelClass}>Degree</label>
+                <input
+                  type="text"
+                  placeholder="e.g. B.S., M.S., Ph.D."
+                  value={edu.degree}
+                  onChange={e => onUpdate(edu.id, 'degree', e.target.value)}
+                  className={inputClass}
+                />
+              </div>
+              <div>
+                <label className={labelClass}>Field of Study</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Computer Science"
+                  value={edu.field}
+                  onChange={e => onUpdate(edu.id, 'field', e.target.value)}
+                  className={inputClass}
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className={labelClass}>Start Date</label>
+                <input
+                  type="month"
+                  value={edu.startDate}
+                  onChange={e => onUpdate(edu.id, 'startDate', e.target.value)}
+                  className={inputClass}
+                />
+              </div>
+              <div>
+                <label className={labelClass}>End Date</label>
+                <input
+                  type="month"
+                  value={edu.endDate}
+                  onChange={e => onUpdate(edu.id, 'endDate', e.target.value)}
+                  className={inputClass}
+                />
+              </div>
             </div>
           </div>
         ))}
+        {education.length === 0 && (
+          <p className="text-sm text-gray-400 text-center py-6">
+            No education added yet. Click "Add" to start.
+          </p>
+        )}
       </div>
     </section>
   );

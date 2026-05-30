@@ -1,6 +1,8 @@
 import { useState, useCallback } from 'react';
 import type { ResumeData, TemplateId } from '../types/resume';
 import { defaultResumeData } from '../types/resume';
+import { useTheme } from '../hooks/useTheme';
+import { sampleData } from '../utils/sampleData';
 import PersonalInfoForm from './forms/PersonalInfoForm';
 import ExperienceForm from './forms/ExperienceForm';
 import EducationForm from './forms/EducationForm';
@@ -14,6 +16,15 @@ export default function Builder() {
   const [resumeData, setResumeData] = useState<ResumeData>(defaultResumeData);
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>('minimal');
   const [isPremium] = useState(false);
+  const { isDark, toggle } = useTheme();
+
+  const loadSample = useCallback(() => {
+    setResumeData(sampleData);
+  }, []);
+
+  const clearAll = useCallback(() => {
+    setResumeData(defaultResumeData);
+  }, []);
 
   const updatePersonalInfo = useCallback((field: string, value: string) => {
     setResumeData(prev => ({
@@ -105,64 +116,104 @@ export default function Builder() {
   }, []);
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen bg-[var(--bg)]">
-      <div className="w-full lg:w-1/2 p-6 overflow-y-auto max-h-screen">
-        <div className="flex items-center gap-2 mb-6">
-          <h1 className="text-2xl font-semibold text-[var(--text-h)]">Resume Builder</h1>
-          {!isPremium && <PremiumBadge />}
+    <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors">
+      <header className="sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-950/80 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <h1 className="text-lg font-bold tracking-tight">Resume Builder</h1>
+            {!isPremium && <PremiumBadge />}
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={loadSample}
+              className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            >
+              Load Sample
+            </button>
+            <button
+              type="button"
+              onClick={clearAll}
+              className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            >
+              Clear
+            </button>
+            <button
+              type="button"
+              onClick={toggle}
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              aria-label="Toggle dark mode"
+            >
+              {isDark ? (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+              ) : (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+              )}
+            </button>
+          </div>
         </div>
+      </header>
 
-        <div className="space-y-6">
-          <section className="bg-[var(--bg)] border border-[var(--border)] rounded-lg p-4">
-            <h2 className="text-lg font-medium text-[var(--text-h)] mb-4">Template</h2>
-            <TemplateSelector
-              selected={selectedTemplate}
-              onSelect={setSelectedTemplate}
-              isPremium={isPremium}
+      <div className="flex flex-col lg:flex-row">
+        <div className="w-full lg:w-1/2 p-4 sm:p-6 lg:max-h-[calc(100vh-56px)] lg:overflow-y-auto">
+          <div className="max-w-2xl mx-auto space-y-5">
+            <section className="rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 p-4 sm:p-5">
+              <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
+                Template
+              </h2>
+              <TemplateSelector
+                selected={selectedTemplate}
+                onSelect={setSelectedTemplate}
+                isPremium={isPremium}
+              />
+            </section>
+
+            <PersonalInfoForm
+              data={resumeData.personalInfo}
+              onChange={updatePersonalInfo}
             />
-          </section>
 
-          <PersonalInfoForm
-            data={resumeData.personalInfo}
-            onChange={updatePersonalInfo}
-          />
+            <ExperienceForm
+              experiences={resumeData.experience}
+              onAdd={addExperience}
+              onUpdate={updateExperience}
+              onRemove={removeExperience}
+            />
 
-          <ExperienceForm
-            experiences={resumeData.experience}
-            onAdd={addExperience}
-            onUpdate={updateExperience}
-            onRemove={removeExperience}
-          />
+            <EducationForm
+              education={resumeData.education}
+              onAdd={addEducation}
+              onUpdate={updateEducation}
+              onRemove={removeEducation}
+            />
 
-          <EducationForm
-            education={resumeData.education}
-            onAdd={addEducation}
-            onUpdate={updateEducation}
-            onRemove={removeEducation}
-          />
-
-          <SkillsForm
-            skills={resumeData.skills}
-            onAdd={addSkill}
-            onUpdate={updateSkill}
-            onRemove={removeSkill}
-          />
+            <SkillsForm
+              skills={resumeData.skills}
+              onAdd={addSkill}
+              onUpdate={updateSkill}
+              onRemove={removeSkill}
+            />
+          </div>
         </div>
-      </div>
 
-      <div className="w-full lg:w-1/2 bg-[var(--social-bg)] p-6 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-medium text-[var(--text-h)]">Preview</h2>
-          <DownloadButton
-            templateId={selectedTemplate}
-            resumeData={resumeData}
-            isPremium={isPremium}
-          />
+        <div className="w-full lg:w-1/2 lg:sticky lg:top-14 lg:h-[calc(100vh-56px)] lg:overflow-y-auto bg-gray-100 dark:bg-gray-900 border-l border-gray-200 dark:border-gray-800">
+          <div className="p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                Preview
+              </h2>
+              <DownloadButton
+                templateId={selectedTemplate}
+                resumeData={resumeData}
+                isPremium={isPremium}
+              />
+            </div>
+            <ResumePreview
+              data={resumeData}
+              templateId={selectedTemplate}
+            />
+          </div>
         </div>
-        <ResumePreview
-          data={resumeData}
-          templateId={selectedTemplate}
-        />
       </div>
     </div>
   );
