@@ -15,7 +15,7 @@ import PremiumSettings from './PremiumSettings';
 import PremiumBadge from './PremiumBadge';
 
 export default function Builder() {
-  const [resumeData, setResumeData] = useLocalStorage<ResumeData>('resumeData', defaultResumeData);
+  const [resumeData, setResumeData] = useLocalStorage<ResumeData>('resumeData', sampleData);
   const [selectedTemplate, setSelectedTemplate] = useLocalStorage<TemplateId>('selectedTemplate', 'minimal');
   const [isPremium, setIsPremium] = useLocalStorage('isPremium', false);
   const { isDark, toggle } = useTheme();
