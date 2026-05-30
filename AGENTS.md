@@ -33,6 +33,7 @@ npm run preview  # Preview production build locally
 ## Architecture Notes
 
 - Templates receive `ResumeData` and render pure JSX (no external deps)
+- Templates are code-split via `React.lazy` – each is a separate ~2.8kB chunk
 - `#resume-preview` div is the capture target for html2canvas
 - Dark mode via `@custom-variant dark (&:where(.dark, .dark *));` in CSS
 - Premium templates (`modern`, `professional`) require `isPremium=true` to unlock (test key: `premium-demo`)
