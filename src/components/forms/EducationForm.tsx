@@ -1,3 +1,4 @@
+import { useState, useCallback } from 'react';
 import type { Education } from '../../types/resume';
 import SortableList from '../DraggableList';
 
@@ -10,9 +11,16 @@ interface Props {
 }
 
 const inputClass = "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent text-sm transition-colors";
+const inputErrorClass = "w-full px-3 py-2 border border-red-400 dark:border-red-500 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-sm transition-colors";
 const labelClass = "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5";
 
 export default function EducationForm({ education, onAdd, onUpdate, onRemove, onMove }: Props) {
+  const [touched, setTouched] = useState<Set<string>>(new Set());
+
+  const handleBlur = useCallback((field: string) => {
+    setTouched(prev => new Set(prev).add(field));
+  }, []);
+
   return (
     <section className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-4 sm:p-5">
       <div className="flex items-center justify-between mb-5">
@@ -49,14 +57,16 @@ export default function EducationForm({ education, onAdd, onUpdate, onRemove, on
                 </button>
               </div>
               <div>
-                <label className={labelClass}>Institution</label>
+                <label className={labelClass}>Institution <span className="text-red-400">*</span></label>
                 <input
                   type="text"
                   placeholder="e.g. Stanford University"
                   value={edu.institution}
                   onChange={e => onUpdate(edu.id, 'institution', e.target.value)}
-                  className={inputClass}
+                  onBlur={() => handleBlur('institution-' + edu.id)}
+                  className={touched.has('institution-' + edu.id) && !edu.institution.trim() ? inputErrorClass : inputClass}
                 />
+                {touched.has('institution-' + edu.id) && !edu.institution.trim() && <p className="mt-1 text-xs text-red-500">Institution name is required</p>}
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>

@@ -278,6 +278,13 @@ export default function Builder() {
               onRemove={removeSkill}
               onMove={moveSkill}
             />
+            <footer className="text-center text-xs text-gray-400 dark:text-gray-600 pb-4">
+              <a href="/privacy.html" className="hover:underline" target="_blank">Privacy</a>
+              <span className="mx-2">·</span>
+              <a href="/terms.html" className="hover:underline" target="_blank">Terms</a>
+              <span className="mx-2">·</span>
+              <span>Resume Builder v1</span>
+            </footer>
           </div>
         </div>
 
