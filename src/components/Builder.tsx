@@ -11,12 +11,13 @@ import SkillsForm from './forms/SkillsForm';
 import TemplateSelector from './TemplateSelector';
 import ResumePreview from './ResumePreview';
 import DownloadButton from './DownloadButton';
+import PremiumSettings from './PremiumSettings';
 import PremiumBadge from './PremiumBadge';
 
 export default function Builder() {
   const [resumeData, setResumeData] = useLocalStorage<ResumeData>('resumeData', defaultResumeData);
   const [selectedTemplate, setSelectedTemplate] = useLocalStorage<TemplateId>('selectedTemplate', 'minimal');
-  const [isPremium] = useLocalStorage('isPremium', false);
+  const [isPremium, setIsPremium] = useLocalStorage('isPremium', false);
   const { isDark, toggle } = useTheme();
 
   const loadSample = useCallback(() => {
@@ -233,6 +234,11 @@ export default function Builder() {
       <div className="flex flex-col lg:flex-row">
         <div className="w-full lg:w-1/2 p-4 sm:p-6 lg:max-h-[calc(100vh-56px)] lg:overflow-y-auto">
           <div className="max-w-2xl mx-auto space-y-5">
+            <PremiumSettings
+              isPremium={isPremium}
+              onActivate={() => setIsPremium(true)}
+              onDeactivate={() => setIsPremium(false)}
+            />
             <section className="rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 p-4 sm:p-5">
               <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
                 Template
