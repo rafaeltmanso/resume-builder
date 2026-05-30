@@ -1,7 +1,8 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import type { ResumeData, TemplateId } from '../types/resume';
 import { defaultResumeData } from '../types/resume';
 import { useTheme } from '../hooks/useTheme';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 import { sampleData } from '../utils/sampleData';
 import PersonalInfoForm from './forms/PersonalInfoForm';
 import ExperienceForm from './forms/ExperienceForm';
@@ -13,9 +14,9 @@ import DownloadButton from './DownloadButton';
 import PremiumBadge from './PremiumBadge';
 
 export default function Builder() {
-  const [resumeData, setResumeData] = useState<ResumeData>(defaultResumeData);
-  const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>('minimal');
-  const [isPremium] = useState(false);
+  const [resumeData, setResumeData] = useLocalStorage<ResumeData>('resumeData', defaultResumeData);
+  const [selectedTemplate, setSelectedTemplate] = useLocalStorage<TemplateId>('selectedTemplate', 'minimal');
+  const [isPremium] = useLocalStorage('isPremium', false);
   const { isDark, toggle } = useTheme();
 
   const loadSample = useCallback(() => {

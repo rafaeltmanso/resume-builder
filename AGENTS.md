@@ -15,6 +15,7 @@ npm run preview  # Preview production build locally
 - **Styling**: Tailwind CSS v4 via `@tailwindcss/vite` plugin
 - **PDF Export**: jsPDF + html2canvas (captures `#resume-preview`)
 - **State**: React useState/useCallback only (no external state lib)
+- **Persistence**: `useLocalStorage` hook auto-saves resume data, template, and premium status
 - **Dark Mode**: `useTheme` hook with `.dark` class on `<html>`, persisted to localStorage
 
 ## Key Files
@@ -25,7 +26,8 @@ npm run preview  # Preview production build locally
 - `src/components/forms/*.tsx` - Input forms (PersonalInfo, Experience, Education, Skills)
 - `src/components/DownloadButton.tsx` - PDF/HTML export with multi-page support
 - `src/components/DraggableList.tsx` - Generic sortable list using native HTML5 drag-and-drop API
-- `src/hooks/useTheme.ts` - Dark mode with system preference fallback
+- `src/hooks/useTheme.ts` - Dark mode with system preference fallback, persisted to localStorage
+- `src/hooks/useLocalStorage.ts` - Generic localStorage-backed state hook
 - `src/utils/sampleData.ts` - Demo data for quick testing
 
 ## Architecture Notes
