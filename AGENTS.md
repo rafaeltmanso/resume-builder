@@ -3,33 +3,39 @@
 ## Commands
 
 ```bash
-npm run dev      # Start dev server at http://localhost:5173
-npm run build    # Type-check + production build to dist/
+npm run dev      # Start dev server at localhost:5173 (switches port if busy)
+npm run build    # tsc -b && vite build (both type-check + bundle)
 npm run lint     # ESLint
 npm run preview  # Preview production build locally
 ```
 
 ## Tech Stack
 
-- **Framework**: React 19 + TypeScript (Vite)
-- **Styling**: Tailwind CSS v4 (via `@tailwindcss/vite`)
-- **PDF Export**: jsPDF + html2canvas
-- **State**: React useState/useCallback (no external state library)
+- **Framework**: React 19 + TypeScript (Vite 8)
+- **Styling**: Tailwind CSS v4 via `@tailwindcss/vite` plugin
+- **PDF Export**: jsPDF + html2canvas (captures `#resume-preview`)
+- **State**: React useState/useCallback only (no external state lib)
+- **Dark Mode**: `useTheme` hook with `.dark` class on `<html>`, persisted to localStorage
 
 ## Key Files
 
-- `src/types/resume.ts` - Core data types (`ResumeData`, `TemplateId`)
-- `src/components/Builder.tsx` - Main app component with form logic
-- `src/components/templates/*.tsx` - Three resume templates
-- `src/components/DownloadButton.tsx` - PDF/HTML export
-- `src/components/forms/*.tsx` - Input forms for each section
+- `src/types/resume.ts` - Core data types (`ResumeData`, `TemplateId`, `defaultResumeData`)
+- `src/components/Builder.tsx` - Main app component (all form handlers, data flow)
+- `src/components/templates/*.tsx` - Three resume templates: Minimal, Modern, Professional
+- `src/components/forms/*.tsx` - Input forms (PersonalInfo, Experience, Education, Skills)
+- `src/components/DownloadButton.tsx` - PDF/HTML export with multi-page support
+- `src/hooks/useTheme.ts` - Dark mode with system preference fallback
+- `src/utils/sampleData.ts` - Demo data for quick testing
 
 ## Architecture Notes
 
 - Templates receive `ResumeData` and render pure JSX (no external deps)
-- PDF export uses html2canvas to capture `#resume-preview` element
+- `#resume-preview` div is the capture target for html2canvas
+- Dark mode via `@custom-variant dark (&:where(.dark, .dark *));` in CSS
 - Premium templates (`modern`, `professional`) require `isPremium=true` to unlock
-- Free tier: `minimal` template only with PDF export
+- Free tier: `minimal` template only, download buttons disabled for locked templates
+- PDF multi-page: splits image across pages if content overflows A4
+- HTML export embeds page styles inline for standalone rendering
 
 ## TypeScript
 
