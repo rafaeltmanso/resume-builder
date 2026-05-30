@@ -39,6 +39,7 @@ npm run preview  # Preview production build locally
 - Free tier: `minimal` template only, download buttons disabled for locked templates
 - PDF multi-page: splits image across pages if content overflows A4
 - HTML export embeds page styles inline for standalone rendering
+- JSON import/export in header (import via file picker, export as download)
 
 ## TypeScript
 
