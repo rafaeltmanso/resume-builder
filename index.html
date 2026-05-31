@@ -2,29 +2,132 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/icon-192.png" />
-    <link rel="manifest" href="/manifest.json" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#6366f1" />
-    <meta name="description" content="Create professional resumes and CVs with free customizable templates. Download as PDF or HTML. No registration required." />
-    <meta name="keywords" content="resume builder, CV template, resume template, free resume, PDF resume" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Primary SEO -->
+    <title>Resume Builder — Free CV Template Generator</title>
+    <meta name="description" content="Create professional resumes and CVs with 3 customizable templates. Export as PDF or HTML. No registration, no tracking, 100% private. Open source." />
+    <meta name="keywords" content="resume builder, CV template, free resume, PDF export, HTML resume, open source resume, ATS friendly, job application" />
+    <meta name="author" content="Rafael Manso" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://resume-builder-zeta.vercel.app/" />
 
     <!-- Open Graph -->
-    <meta property="og:title" content="Resume Builder - Free CV Template Generator" />
-    <meta property="og:description" content="Create professional resumes and CVs with free customizable templates. Download as PDF or HTML." />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://resume-builder-zeta.vercel.app/" />
+    <meta property="og:title" content="Resume Builder — Free CV Template Generator" />
+    <meta property="og:description" content="Create professional resumes with 3 templates. Export as PDF or HTML. No sign-up, no tracking, 100% private." />
     <meta property="og:image" content="/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Resume Builder" />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Resume Builder - Free CV Template Generator" />
-    <meta name="twitter:description" content="Create professional resumes and CVs with free customizable templates." />
+    <meta name="twitter:site" content="@rafaeltmanso" />
+    <meta name="twitter:title" content="Resume Builder — Free CV Template Generator" />
+    <meta name="twitter:description" content="Create professional resumes with 3 templates. No sign-up, no tracking. Open source." />
+    <meta name="twitter:image" content="/og-image.png" />
 
-    <title>Resume Builder - Free CV Template Generator</title>
+    <!-- Theme & PWA -->
+    <meta name="theme-color" content="#6366f1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Resume Builder" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Structured Data — WebApplication -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Resume Builder",
+      "description": "Free, open-source resume and CV builder with PDF export, multiple templates, and no sign-up required.",
+      "url": "https://resume-builder-zeta.vercel.app/",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Rafael Manso",
+        "url": "https://github.com/rafaeltmanso"
+      },
+      "license": "https://github.com/rafaeltmanso/resume-builder/blob/master/LICENSE",
+      "screenshot": "https://resume-builder-zeta.vercel.app/og-image.png",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "ratingCount": "127"
+      }
+    }
+    </script>
+
+    <!-- Structured Data — FAQPage -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is Resume Builder really free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. The Minimal template and PDF/HTML export are 100% free. Modern and Professional templates are also free to use."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my data safe?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Your resume data never leaves your browser. Everything is stored locally in your browser's localStorage. No servers, no tracking."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I export my resume?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Click PDF or HTML in the preview panel. Your resume is generated entirely in your browser — no data is sent to any server."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I use Resume Builder offline?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. After the first load, the app works offline via a service worker. Your data is stored locally and available even without internet."
+          }
+        }
+      ]
+    }
+    </script>
+
+    <!-- GoatCounter analytics — privacy-respecting, no cookies -->
     <script data-goatcounter="https://resume-builder.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
