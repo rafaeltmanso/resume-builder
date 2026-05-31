@@ -249,24 +249,51 @@ export default function Builder() {
     input.click();
   }, [setResumeData]);
 
+  const hasContact = Boolean(resumeData.personalInfo.email || resumeData.personalInfo.phone || resumeData.personalInfo.location);
+  const completedSections = [
+    Boolean(resumeData.personalInfo.fullName && hasContact),
+    Boolean(resumeData.personalInfo.summary),
+    resumeData.experience.length > 0,
+    resumeData.education.length > 0,
+    resumeData.skills.length > 0,
+  ].filter(Boolean).length;
+  const completion = Math.round((completedSections / 5) * 100);
+  const sectionStats = [
+    { label: 'Experience', value: resumeData.experience.length },
+    { label: 'Education', value: resumeData.education.length },
+    { label: 'Skills', value: resumeData.skills.length },
+  ];
+
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors">
+    <div className="min-h-screen bg-stone-100 text-stone-950 transition-colors dark:bg-neutral-950 dark:text-stone-100">
       {/* Skip link */}
       <a href="#main-content" className="skip-link">Skip to main content</a>
 
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-950/80 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <h1 className="text-lg font-bold tracking-tight">Resume Builder</h1>
-            {!isPremium && <PremiumBadge />}
-            <AutoSaveIndicator state={saveState} />
+      <header className="sticky top-0 z-50 border-b border-stone-300/80 bg-stone-50/95 backdrop-blur dark:border-neutral-800 dark:bg-neutral-950/90">
+        <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between px-4 sm:px-6">
+          <div className="flex min-w-0 items-center gap-4">
+            <div className="flex h-9 w-9 items-center justify-center rounded-md bg-stone-950 text-sm font-semibold text-white dark:bg-stone-100 dark:text-stone-950">
+              RB
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <h1 className="truncate text-sm font-semibold tracking-tight text-stone-950 dark:text-stone-50">Resume Builder</h1>
+                {!isPremium && <PremiumBadge />}
+              </div>
+              <div className="mt-0.5 flex items-center gap-2 text-xs text-stone-500 dark:text-stone-400">
+                <span>{completion}% ready</span>
+                <span aria-hidden="true">/</span>
+                <AutoSaveIndicator state={saveState} />
+                {saveState === 'saved' && <span>Saved locally</span>}
+              </div>
+            </div>
           </div>
-          <nav className="flex items-center gap-1" aria-label="Toolbar">
+          <nav className="flex items-center gap-1.5" aria-label="Toolbar">
             <button
               type="button"
               onClick={loadSample}
-              className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="rounded-md border border-stone-300 bg-white px-3 py-2 text-sm font-medium text-stone-700 transition hover:border-stone-400 hover:bg-stone-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-stone-200 dark:hover:bg-neutral-800"
               title="Load sample data"
               aria-label="Load sample resume data"
             >
@@ -275,49 +302,49 @@ export default function Builder() {
             <button
               type="button"
               onClick={clearAll}
-              className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="rounded-md border border-stone-300 bg-white px-3 py-2 text-sm font-medium text-stone-700 transition hover:border-stone-400 hover:bg-stone-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-stone-200 dark:hover:bg-neutral-800"
               title="Clear all data"
               aria-label="Clear all resume data"
             >
               Clear
             </button>
-            <div className="w-px h-5 bg-gray-300 dark:bg-gray-600 mx-1" aria-hidden="true" />
+            <div className="mx-1 h-6 w-px bg-stone-300 dark:bg-neutral-800" aria-hidden="true" />
             <button
               type="button"
               onClick={importData}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="rounded-md p-2 text-stone-600 transition hover:bg-stone-200/70 dark:text-stone-300 dark:hover:bg-neutral-800"
               aria-label="Import resume data from JSON file"
               title="Import JSON"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
               </svg>
             </button>
             <button
               type="button"
               onClick={exportData}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="rounded-md p-2 text-stone-600 transition hover:bg-stone-200/70 dark:text-stone-300 dark:hover:bg-neutral-800"
               aria-label="Export resume data as JSON file"
               title="Export JSON"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
             </button>
             <button
               type="button"
               onClick={toggle}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="rounded-md p-2 text-stone-600 transition hover:bg-stone-200/70 dark:text-stone-300 dark:hover:bg-neutral-800"
               aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
               title={isDark ? 'Light mode (Ctrl+L)' : 'Dark mode (Ctrl+L)'}
             >
               {isDark ? (
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                <svg className="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
               ) : (
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                <svg className="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                 </svg>
               )}
             </button>
@@ -325,14 +352,40 @@ export default function Builder() {
         </div>
       </header>
 
-      <div className="flex flex-col lg:flex-row" id="main-content">
+      <div className="mx-auto grid max-w-[1600px] grid-cols-1 lg:grid-cols-[minmax(420px,0.9fr)_minmax(520px,1.1fr)]" id="main-content">
         {/* Editor Panel */}
         <div
-          className="w-full lg:w-1/2 p-4 sm:p-6 lg:max-h-[calc(100vh-56px)] lg:overflow-y-auto"
+          className="p-4 sm:p-6 lg:max-h-[calc(100vh-64px)] lg:overflow-y-auto"
           role="main"
           aria-label="Resume editor"
         >
-          <div className="max-w-2xl mx-auto space-y-5">
+          <div className="mx-auto max-w-3xl space-y-4">
+            <section className="rounded-lg border border-stone-300 bg-white p-4 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-xs font-semibold uppercase text-cyan-700 dark:text-cyan-300">Workspace</p>
+                  <h2 className="mt-1 text-xl font-semibold tracking-tight text-stone-950 dark:text-stone-50">Edit, check, export.</h2>
+                </div>
+                <div className="min-w-[160px]">
+                  <div className="flex items-center justify-between text-xs font-medium text-stone-500 dark:text-stone-400">
+                    <span>Completion</span>
+                    <span>{completion}%</span>
+                  </div>
+                  <div className="mt-2 h-2 overflow-hidden rounded-full bg-stone-200 dark:bg-neutral-800">
+                    <div className="h-full rounded-full bg-cyan-700 dark:bg-cyan-400" style={{ width: `${completion}%` }} />
+                  </div>
+                </div>
+              </div>
+              <div className="mt-4 grid grid-cols-3 gap-2">
+                {sectionStats.map(stat => (
+                  <div key={stat.label} className="rounded-md border border-stone-200 bg-stone-50 px-3 py-2 dark:border-neutral-800 dark:bg-neutral-950">
+                    <div className="text-lg font-semibold leading-none text-stone-950 dark:text-stone-50">{stat.value}</div>
+                    <div className="mt-1 truncate text-xs text-stone-500 dark:text-stone-400">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
             <PremiumSettings
               isPremium={isPremium}
               onActivate={() => { setIsPremium(true); toast.success('Premium activated!'); }}
@@ -340,10 +393,10 @@ export default function Builder() {
             />
 
             <section
-              className="rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 p-4 sm:p-5"
+              className="rounded-lg border border-stone-300 bg-white p-4 shadow-sm dark:border-neutral-800 dark:bg-neutral-900 sm:p-5"
               aria-labelledby="template-heading"
             >
-              <h2 id="template-heading" className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
+              <h2 id="template-heading" className="mb-4 text-xs font-semibold uppercase text-stone-500 dark:text-stone-400">
                 Template
               </h2>
               <TemplateSelector
@@ -390,18 +443,7 @@ export default function Builder() {
               />
             </section>
 
-            {/* Keyboard shortcuts reference */}
-            <details className="text-xs text-gray-400 dark:text-gray-600 rounded-lg p-3 bg-gray-50 dark:bg-gray-900/50">
-              <summary className="cursor-pointer select-none font-medium">Keyboard shortcuts</summary>
-              <ul className="mt-2 space-y-1 grid grid-cols-1 sm:grid-cols-2 gap-x-4">
-                <li><kbd className="font-mono bg-gray-200 dark:bg-gray-700 px-1 rounded">Ctrl+S</kbd> Save (show toast)</li>
-                <li><kbd className="font-mono bg-gray-200 dark:bg-gray-700 px-1 rounded">Ctrl+E</kbd> Export PDF</li>
-                <li><kbd className="font-mono bg-gray-200 dark:bg-gray-700 px-1 rounded">Ctrl+L</kbd> Toggle dark mode</li>
-                <li><kbd className="font-mono bg-gray-200 dark:bg-gray-700 px-1 rounded">?</kbd> Show shortcuts</li>
-              </ul>
-            </details>
-
-            <footer className="text-center text-xs text-gray-400 dark:text-gray-600 pb-4 space-y-1">
+            <footer className="pb-4 text-center text-xs text-stone-500 dark:text-stone-500">
               <div className="flex items-center justify-center gap-2">
                 <a href="/privacy.html" className="hover:underline" target="_blank" rel="noopener noreferrer">Privacy</a>
                 <span aria-hidden="true">·</span>
@@ -426,13 +468,21 @@ export default function Builder() {
 
         {/* Preview Panel */}
         <div
-          className="w-full lg:w-1/2 lg:sticky lg:top-14 lg:h-[calc(100vh-56px)] lg:overflow-y-auto bg-gray-100 dark:bg-gray-900 border-l border-gray-200 dark:border-gray-800"
+          className="border-t border-stone-300 bg-stone-200/60 dark:border-neutral-800 dark:bg-neutral-900/60 lg:sticky lg:top-16 lg:h-[calc(100vh-64px)] lg:overflow-y-auto lg:border-l lg:border-t-0"
           aria-label="Resume preview"
           role="complementary"
         >
-          <div className="p-4 sm:p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider sr-only">
+          <div className="p-4 sm:p-6 lg:p-8">
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <div>
+                <h2 className="text-xs font-semibold uppercase text-stone-500 dark:text-stone-400">
+                  Preview
+                </h2>
+                <p className="mt-1 text-sm text-stone-600 dark:text-stone-400">
+                  A4 export view
+                </p>
+              </div>
+              <h2 className="sr-only">
                 Resume Preview
               </h2>
               <DownloadButton

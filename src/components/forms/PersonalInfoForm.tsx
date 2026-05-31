@@ -33,9 +33,9 @@ function validate(data: PersonalInfo): Errors {
   return errors;
 }
 
-const inputClass = "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent text-sm transition-colors";
-const inputErrorClass = "w-full px-3 py-2 border border-red-400 dark:border-red-500 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-sm transition-colors";
-const labelClass = "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5";
+const inputClass = "w-full rounded-md border border-stone-300 bg-stone-50 px-3 py-2 text-sm text-stone-950 placeholder-stone-400 transition focus:border-cyan-700 focus:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-700/20 dark:border-neutral-700 dark:bg-neutral-950 dark:text-stone-100 dark:placeholder-stone-600 dark:focus:border-cyan-400 dark:focus:bg-neutral-900";
+const inputErrorClass = "w-full rounded-md border border-red-400 bg-white px-3 py-2 text-sm text-stone-950 placeholder-stone-400 transition focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500/20 dark:border-red-500 dark:bg-neutral-950 dark:text-stone-100";
+const labelClass = "mb-1.5 block text-sm font-medium text-stone-700 dark:text-stone-300";
 
 export default function PersonalInfoForm({ data, onChange }: Props) {
   const [touched, setTouched] = useState<Set<string>>(new Set());
@@ -46,9 +46,9 @@ export default function PersonalInfoForm({ data, onChange }: Props) {
   }, []);
 
   return (
-    <section className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-4 sm:p-5">
-      <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-5 flex items-center gap-2">
-        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+    <section className="rounded-lg border border-stone-300 bg-white p-4 shadow-sm dark:border-neutral-800 dark:bg-neutral-900 sm:p-5">
+      <h2 className="mb-5 flex items-center gap-2 text-xs font-semibold uppercase text-stone-500 dark:text-stone-400">
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
         Personal Information
       </h2>
       <div className="space-y-4">

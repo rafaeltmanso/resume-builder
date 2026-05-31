@@ -78,10 +78,10 @@ export default function DownloadButton({ templateId, resumeData, isPremium }: Pr
         onClick={() => handleDownload('pdf')}
         disabled={isLocked || loading !== null}
         aria-label="Download resume as PDF"
-        className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${
+        className={`inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium transition ${
           isLocked
-            ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed'
-            : 'bg-indigo-500 text-white hover:bg-indigo-600 disabled:opacity-70'
+            ? 'cursor-not-allowed bg-stone-300 text-stone-500 dark:bg-neutral-800 dark:text-stone-500'
+            : 'bg-cyan-700 text-white hover:bg-cyan-800 disabled:opacity-70 dark:bg-cyan-500 dark:text-neutral-950 dark:hover:bg-cyan-400'
         }`}
       >
         {loading === 'pdf' ? <Spinner /> : (
@@ -92,10 +92,10 @@ export default function DownloadButton({ templateId, resumeData, isPremium }: Pr
       <button
         onClick={() => handleDownload('html')}
         disabled={isLocked || loading !== null}
-        className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${
+        className={`inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium transition ${
           isLocked
-            ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed'
-            : 'border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-50'
+            ? 'cursor-not-allowed bg-stone-300 text-stone-500 dark:bg-neutral-800 dark:text-stone-500'
+            : 'border border-stone-300 bg-white text-stone-700 hover:bg-stone-50 disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-stone-200 dark:hover:bg-neutral-800'
         }`}
       >
         {loading === 'html' ? <Spinner /> : (

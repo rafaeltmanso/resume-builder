@@ -12,7 +12,7 @@ interface Props {
 
 function LoadingSkeleton() {
   return (
-    <div className="bg-white text-black shadow-lg rounded p-8 animate-pulse">
+    <div className="rounded-sm bg-white p-8 text-black shadow-sm animate-pulse">
       <div className="h-8 w-64 bg-gray-200 rounded mb-2" />
       <div className="h-4 w-48 bg-gray-100 rounded mb-6" />
       <div className="space-y-3">
@@ -34,7 +34,7 @@ export default function ResumePreview({ data, templateId }: Props) {
   const Template = templateComponents[templateId];
 
   return (
-    <div id="resume-preview" className="bg-white text-black shadow-lg rounded">
+    <div id="resume-preview" className="mx-auto min-h-[297mm] w-full max-w-[210mm] rounded-sm bg-white text-black shadow-[0_24px_80px_rgba(28,25,23,0.18)]">
       <Suspense fallback={<LoadingSkeleton />}>
         <Template data={data} />
       </Suspense>
