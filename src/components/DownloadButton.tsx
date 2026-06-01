@@ -72,7 +72,7 @@ export default function DownloadButton({ templateId, resumeData, isPremium }: Pr
   const isLocked = !isPremium && templateId !== 'minimal';
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 w-full justify-end">
       <button
         id="download-pdf-btn"
         onClick={() => handleDownload('pdf')}
@@ -81,7 +81,7 @@ export default function DownloadButton({ templateId, resumeData, isPremium }: Pr
         className={`inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium transition ${
           isLocked
             ? 'cursor-not-allowed bg-stone-300 text-stone-500 dark:bg-neutral-800 dark:text-stone-500'
-            : 'bg-cyan-700 text-white hover:bg-cyan-800 disabled:opacity-70 dark:bg-cyan-500 dark:text-neutral-950 dark:hover:bg-cyan-400'
+            : 'bg-cyan-700 text-white hover:bg-cyan-800 disabled:opacity-70 dark:bg-cyan-600 dark:text-white dark:hover:bg-cyan-500'
         }`}
       >
         {loading === 'pdf' ? <Spinner /> : (

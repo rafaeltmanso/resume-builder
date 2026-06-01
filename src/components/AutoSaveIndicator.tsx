@@ -13,7 +13,7 @@ export default function AutoSaveIndicator({ state }: Props) {
       role="status"
       aria-live="polite"
       aria-atomic="true"
-      className="flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-500"
+      className="flex items-center gap-1.5 text-xs text-stone-500 dark:text-stone-400"
     >
       {state === 'saving' && (
         <>

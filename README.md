@@ -2,7 +2,7 @@
 
 **Free, open-source, privacy-first resume and CV builder. No sign-up, no tracking, no servers.**
 
-Open the app directly into a focused editing workspace, choose from 3 templates, fill in your details, and export as PDF or HTML. Your data never leaves your browser.
+Open a polished product landing page, launch the focused editing workspace, choose from 3 templates, fill in your details, and export as PDF or HTML. Your data never leaves your browser.
 
 Live at [resume-builder-zeta.vercel.app](https://resume-builder-zeta.vercel.app/)
 
@@ -63,7 +63,8 @@ npm run preview  # Preview the production build locally
 
 ```
 src/
-  components/
+    components/
+    LandingPage.tsx       # Product landing page
     Builder.tsx           # Editor-first workspace and preview layout
     ResumePreview.tsx     # Live template preview renderer
     DownloadButton.tsx    # PDF & HTML export

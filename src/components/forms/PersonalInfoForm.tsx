@@ -47,14 +47,15 @@ export default function PersonalInfoForm({ data, onChange }: Props) {
 
   return (
     <section className="rounded-lg border border-stone-300 bg-white p-4 shadow-sm dark:border-neutral-800 dark:bg-neutral-900 sm:p-5">
-      <h2 className="mb-5 flex items-center gap-2 text-xs font-semibold uppercase text-stone-500 dark:text-stone-400">
+      <h2 id="personal-heading" className="mb-5 flex items-center gap-2 text-sm font-semibold text-stone-800 dark:text-stone-200">
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
         Personal Information
       </h2>
       <div className="space-y-4">
         <div>
-          <label className={labelClass}>Full Name <span className="text-red-400">*</span></label>
+          <label htmlFor="personal-full-name" className={labelClass}>Full Name <span className="text-red-400">*</span></label>
           <input
+            id="personal-full-name"
             type="text"
             placeholder="e.g. John Doe"
             value={data.fullName}

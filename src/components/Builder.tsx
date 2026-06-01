@@ -18,7 +18,11 @@ import { toast } from './toastStore';
 import type { SaveState } from './AutoSaveIndicator';
 import AutoSaveIndicator from './AutoSaveIndicator';
 
-export default function Builder() {
+interface Props {
+  onGoHome?: () => void;
+}
+
+export default function Builder({ onGoHome }: Props) {
   const [resumeData, setResumeData] = useLocalStorage<ResumeData>('resumeData', sampleData);
   const [selectedTemplate, setSelectedTemplate] = useLocalStorage<TemplateId>('selectedTemplate', 'minimal');
   const [isPremium, setIsPremium] = useLocalStorage('isPremium', false);
@@ -258,21 +262,25 @@ export default function Builder() {
     resumeData.skills.length > 0,
   ].filter(Boolean).length;
   const completion = Math.round((completedSections / 5) * 100);
-  const sectionStats = [
-    { label: 'Experience', value: resumeData.experience.length },
-    { label: 'Education', value: resumeData.education.length },
-    { label: 'Skills', value: resumeData.skills.length },
-  ];
+  const completionLabel = `${completedSections} of 5 sections`;
 
+  const scrollToPreview = useCallback(() => {
+    document.getElementById('resume-preview-panel')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, []);
   return (
-    <div className="min-h-screen bg-stone-100 text-stone-950 transition-colors dark:bg-neutral-950 dark:text-stone-100">
+    <div className="min-h-screen bg-neutral-50 text-stone-950 transition-colors dark:bg-neutral-950 dark:text-stone-100">
       {/* Skip link */}
       <a href="#main-content" className="skip-link">Skip to main content</a>
 
       {/* Header */}
       <header className="sticky top-0 z-50 border-b border-stone-300/80 bg-stone-50/95 backdrop-blur dark:border-neutral-800 dark:bg-neutral-950/90">
         <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between px-4 sm:px-6">
-          <div className="flex min-w-0 items-center gap-4">
+          <button
+            type="button"
+            onClick={() => onGoHome?.()}
+            className="flex min-w-0 items-center gap-4 rounded-md text-left transition hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-400"
+            aria-label="Back to home"
+          >
             <div className="flex h-9 w-9 items-center justify-center rounded-md bg-stone-950 text-sm font-semibold text-white dark:bg-stone-100 dark:text-stone-950">
               RB
             </div>
@@ -282,13 +290,13 @@ export default function Builder() {
                 {!isPremium && <PremiumBadge />}
               </div>
               <div className="mt-0.5 flex items-center gap-2 text-xs text-stone-500 dark:text-stone-400">
-                <span>{completion}% ready</span>
+                <span title={`${completion}% complete`}>{completionLabel}</span>
                 <span aria-hidden="true">/</span>
                 <AutoSaveIndicator state={saveState} />
                 {saveState === 'saved' && <span>Saved locally</span>}
               </div>
             </div>
-          </div>
+          </button>
           <nav className="flex items-center gap-1.5" aria-label="Toolbar">
             <button
               type="button"
@@ -312,24 +320,26 @@ export default function Builder() {
             <button
               type="button"
               onClick={importData}
-              className="rounded-md p-2 text-stone-600 transition hover:bg-stone-200/70 dark:text-stone-300 dark:hover:bg-neutral-800"
+              className="inline-flex items-center gap-1.5 rounded-md px-2 py-2 text-sm text-stone-600 transition hover:bg-stone-200/70 dark:text-stone-300 dark:hover:bg-neutral-800"
               aria-label="Import resume data from JSON file"
               title="Import JSON"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
               </svg>
+              <span className="hidden sm:inline">Import</span>
             </button>
             <button
               type="button"
               onClick={exportData}
-              className="rounded-md p-2 text-stone-600 transition hover:bg-stone-200/70 dark:text-stone-300 dark:hover:bg-neutral-800"
+              className="inline-flex items-center gap-1.5 rounded-md px-2 py-2 text-sm text-stone-600 transition hover:bg-stone-200/70 dark:text-stone-300 dark:hover:bg-neutral-800"
               aria-label="Export resume data as JSON file"
               title="Export JSON"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
+              <span className="hidden sm:inline">Export</span>
             </button>
             <button
               type="button"
@@ -355,48 +365,26 @@ export default function Builder() {
       <div className="mx-auto grid max-w-[1600px] grid-cols-1 lg:grid-cols-[minmax(420px,0.9fr)_minmax(520px,1.1fr)]" id="main-content">
         {/* Editor Panel */}
         <div
-          className="p-4 sm:p-6 lg:max-h-[calc(100vh-64px)] lg:overflow-y-auto"
+          className="p-4 pb-24 sm:p-6 lg:max-h-[calc(100vh-64px)] lg:overflow-y-auto lg:pb-6"
           role="main"
           aria-label="Resume editor"
         >
           <div className="mx-auto max-w-3xl space-y-4">
-            <section className="rounded-lg border border-stone-300 bg-white p-4 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <p className="text-xs font-semibold uppercase text-cyan-700 dark:text-cyan-300">Workspace</p>
-                  <h2 className="mt-1 text-xl font-semibold tracking-tight text-stone-950 dark:text-stone-50">Edit, check, export.</h2>
-                </div>
-                <div className="min-w-[160px]">
-                  <div className="flex items-center justify-between text-xs font-medium text-stone-500 dark:text-stone-400">
-                    <span>Completion</span>
-                    <span>{completion}%</span>
-                  </div>
-                  <div className="mt-2 h-2 overflow-hidden rounded-full bg-stone-200 dark:bg-neutral-800">
-                    <div className="h-full rounded-full bg-cyan-700 dark:bg-cyan-400" style={{ width: `${completion}%` }} />
-                  </div>
-                </div>
-              </div>
-              <div className="mt-4 grid grid-cols-3 gap-2">
-                {sectionStats.map(stat => (
-                  <div key={stat.label} className="rounded-md border border-stone-200 bg-stone-50 px-3 py-2 dark:border-neutral-800 dark:bg-neutral-950">
-                    <div className="text-lg font-semibold leading-none text-stone-950 dark:text-stone-50">{stat.value}</div>
-                    <div className="mt-1 truncate text-xs text-stone-500 dark:text-stone-400">{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <PremiumSettings
-              isPremium={isPremium}
-              onActivate={() => { setIsPremium(true); toast.success('Premium activated!'); }}
-              onDeactivate={() => setIsPremium(false)}
-            />
+            <div className="flex items-center justify-end lg:hidden">
+              <button
+                type="button"
+                onClick={scrollToPreview}
+                className="inline-flex items-center gap-1.5 rounded-md border border-stone-300 bg-white px-3 py-2 text-sm font-medium text-stone-700 transition hover:bg-stone-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-stone-200"
+              >
+                Jump to preview
+              </button>
+            </div>
 
             <section
               className="rounded-lg border border-stone-300 bg-white p-4 shadow-sm dark:border-neutral-800 dark:bg-neutral-900 sm:p-5"
               aria-labelledby="template-heading"
             >
-              <h2 id="template-heading" className="mb-4 text-xs font-semibold uppercase text-stone-500 dark:text-stone-400">
+              <h2 id="template-heading" className="mb-4 text-sm font-semibold text-stone-800 dark:text-stone-200">
                 Template
               </h2>
               <TemplateSelector
@@ -405,6 +393,12 @@ export default function Builder() {
                 isPremium={isPremium}
               />
             </section>
+
+            <PremiumSettings
+              isPremium={isPremium}
+              onActivate={() => { setIsPremium(true); toast.success('Premium activated!'); }}
+              onDeactivate={() => setIsPremium(false)}
+            />
 
             <section aria-labelledby="personal-heading">
               <PersonalInfoForm
@@ -468,28 +462,28 @@ export default function Builder() {
 
         {/* Preview Panel */}
         <div
-          className="border-t border-stone-300 bg-stone-200/60 dark:border-neutral-800 dark:bg-neutral-900/60 lg:sticky lg:top-16 lg:h-[calc(100vh-64px)] lg:overflow-y-auto lg:border-l lg:border-t-0"
+          id="resume-preview-panel"
+          className="border-t border-stone-300 bg-neutral-100/80 dark:border-neutral-800 dark:bg-neutral-900/60 lg:sticky lg:top-16 lg:h-[calc(100vh-64px)] lg:overflow-y-auto lg:border-l lg:border-t-0"
           aria-label="Resume preview"
           role="complementary"
         >
           <div className="p-4 sm:p-6 lg:p-8">
             <div className="mb-4 flex items-center justify-between gap-3">
               <div>
-                <h2 className="text-xs font-semibold uppercase text-stone-500 dark:text-stone-400">
+                <h2 className="text-sm font-semibold text-stone-800 dark:text-stone-200">
                   Preview
                 </h2>
                 <p className="mt-1 text-sm text-stone-600 dark:text-stone-400">
                   A4 export view
                 </p>
               </div>
-              <h2 className="sr-only">
-                Resume Preview
-              </h2>
-              <DownloadButton
-                templateId={selectedTemplate}
-                resumeData={resumeData}
-                isPremium={isPremium}
-              />
+              <div className="hidden lg:block">
+                <DownloadButton
+                  templateId={selectedTemplate}
+                  resumeData={resumeData}
+                  isPremium={isPremium}
+                />
+              </div>
             </div>
             <ResumePreview
               data={resumeData}
@@ -497,6 +491,14 @@ export default function Builder() {
             />
           </div>
         </div>
+      </div>
+
+      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-stone-300 bg-stone-50/95 px-4 py-3 backdrop-blur dark:border-neutral-800 dark:bg-neutral-950/95 lg:hidden">
+        <DownloadButton
+          templateId={selectedTemplate}
+          resumeData={resumeData}
+          isPremium={isPremium}
+        />
       </div>
 
       <ToastContainer />

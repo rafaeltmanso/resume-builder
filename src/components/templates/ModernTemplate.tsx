@@ -20,7 +20,7 @@ export default function ModernTemplate({ data }: Props) {
       </div>
 
       {personalInfo.summary && (
-        <section className="mb-6 border-l-4 border-cyan-700 bg-white p-4">
+        <section className="mb-6 rounded-md border border-stone-200 bg-cyan-50/60 p-4">
           <h2 className="mb-2 text-xs font-semibold uppercase text-cyan-800">Summary</h2>
           <p className="text-stone-800">{personalInfo.summary}</p>
         </section>
