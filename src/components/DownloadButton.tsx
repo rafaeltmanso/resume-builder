@@ -7,6 +7,8 @@ interface Props {
   templateId: TemplateId;
   resumeData: ResumeData;
   isPremium: boolean;
+  /** Stretch buttons for the mobile bottom bar */
+  layout?: 'inline' | 'bar';
 }
 
 function Spinner() {
@@ -18,7 +20,7 @@ function Spinner() {
   );
 }
 
-export default function DownloadButton({ templateId, resumeData, isPremium }: Props) {
+export default function DownloadButton({ templateId, resumeData, isPremium, layout = 'inline' }: Props) {
   const [loading, setLoading] = useState<'pdf' | 'html' | null>(null);
 
   const handleDownload = async (format: 'pdf' | 'html') => {
@@ -70,15 +72,19 @@ export default function DownloadButton({ templateId, resumeData, isPremium }: Pr
   };
 
   const isLocked = !isPremium && templateId !== 'minimal';
+  const isBar = layout === 'bar';
+  const buttonBase = isBar
+    ? 'inline-flex flex-1 items-center justify-center gap-1.5 rounded-md px-2 py-2.5 text-sm font-medium transition min-w-0'
+    : 'inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium transition';
 
   return (
-    <div className="flex gap-2 w-full justify-end">
+    <div className={isBar ? 'flex min-w-0 flex-[2] gap-2' : 'flex w-full justify-end gap-2'}>
       <button
         id="download-pdf-btn"
         onClick={() => handleDownload('pdf')}
         disabled={isLocked || loading !== null}
         aria-label="Download resume as PDF"
-        className={`inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium transition ${
+        className={`${buttonBase} ${
           isLocked
             ? 'cursor-not-allowed bg-stone-300 text-stone-500 dark:bg-neutral-800 dark:text-stone-500'
             : 'bg-cyan-700 text-white hover:bg-cyan-800 disabled:opacity-70 dark:bg-cyan-600 dark:text-white dark:hover:bg-cyan-500'
@@ -92,7 +98,8 @@ export default function DownloadButton({ templateId, resumeData, isPremium }: Pr
       <button
         onClick={() => handleDownload('html')}
         disabled={isLocked || loading !== null}
-        className={`inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium transition ${
+        aria-label="Download resume as HTML"
+        className={`${buttonBase} ${
           isLocked
             ? 'cursor-not-allowed bg-stone-300 text-stone-500 dark:bg-neutral-800 dark:text-stone-500'
             : 'border border-stone-300 bg-white text-stone-700 hover:bg-stone-50 disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-stone-200 dark:hover:bg-neutral-800'

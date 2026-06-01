@@ -371,16 +371,6 @@ export default function Builder({ onGoHome }: Props) {
           aria-label="Resume editor"
         >
           <div className="mx-auto max-w-3xl space-y-4">
-            <div className="flex items-center justify-end lg:hidden">
-              <button
-                type="button"
-                onClick={scrollToPreview}
-                className="inline-flex items-center gap-1.5 rounded-md border border-stone-300 bg-white px-3 py-2 text-sm font-medium text-stone-700 transition hover:bg-stone-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-stone-200"
-              >
-                Jump to preview
-              </button>
-            </div>
-
             <section
               className="rounded-lg border border-stone-300 bg-white p-4 shadow-sm dark:border-neutral-800 dark:bg-neutral-900 sm:p-5"
               aria-labelledby="template-heading"
@@ -456,7 +446,7 @@ export default function Builder({ onGoHome }: Props) {
         {/* Preview Panel */}
         <div
           id="resume-preview-panel"
-          className="border-t border-stone-300 bg-neutral-100/80 dark:border-neutral-800 dark:bg-neutral-900/60 lg:sticky lg:top-16 lg:h-[calc(100vh-64px)] lg:overflow-y-auto lg:border-l lg:border-t-0"
+          className="border-t border-stone-300 bg-neutral-100/80 pb-24 dark:border-neutral-800 dark:bg-neutral-900/60 lg:sticky lg:top-16 lg:h-[calc(100vh-64px)] lg:overflow-y-auto lg:border-l lg:border-t-0 lg:pb-0"
           aria-label="Resume preview"
           role="complementary"
         >
@@ -486,13 +476,31 @@ export default function Builder({ onGoHome }: Props) {
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-stone-300 bg-stone-50/95 px-4 py-3 backdrop-blur dark:border-neutral-800 dark:bg-neutral-950/95 lg:hidden">
-        <DownloadButton
-          templateId={selectedTemplate}
-          resumeData={resumeData}
-          isPremium={isPremium}
-        />
-      </div>
+      <nav
+        className="fixed bottom-0 left-0 right-0 z-40 border-t border-stone-300 bg-stone-50/95 px-4 pt-3 backdrop-blur dark:border-neutral-800 dark:bg-neutral-950/95 lg:hidden"
+        style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
+        aria-label="Preview and export"
+      >
+        <div className="mx-auto flex max-w-lg gap-2">
+          <button
+            type="button"
+            onClick={scrollToPreview}
+            className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md border border-stone-300 bg-white px-2 py-2.5 text-sm font-medium text-stone-800 transition hover:bg-stone-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-stone-100 dark:hover:bg-neutral-800"
+          >
+            <svg className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+            Preview
+          </button>
+          <DownloadButton
+            layout="bar"
+            templateId={selectedTemplate}
+            resumeData={resumeData}
+            isPremium={isPremium}
+          />
+        </div>
+      </nav>
 
       <ToastContainer />
     </div>
