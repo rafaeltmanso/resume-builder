@@ -17,6 +17,7 @@ import ToastContainer from './Toast';
 import { toast } from './toastStore';
 import type { SaveState } from './AutoSaveIndicator';
 import AutoSaveIndicator from './AutoSaveIndicator';
+import { BrandMark, BrandWordmark } from './BrandLogo';
 
 interface Props {
   onGoHome?: () => void;
@@ -281,12 +282,12 @@ export default function Builder({ onGoHome }: Props) {
             className="flex min-w-0 items-center gap-4 rounded-md text-left transition hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-400"
             aria-label="Back to home"
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-md bg-stone-950 text-sm font-semibold text-white dark:bg-stone-100 dark:text-stone-950">
-              RB
-            </div>
+            <BrandMark className="h-9 w-9 shrink-0" />
             <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <h1 className="truncate text-sm font-semibold tracking-tight text-stone-950 dark:text-stone-50">Resume Builder</h1>
+                <h1 className="truncate text-sm">
+                  <BrandWordmark />
+                </h1>
                 {!isPremium && <PremiumBadge />}
               </div>
               <div className="mt-0.5 flex items-center gap-2 text-xs text-stone-500 dark:text-stone-400">
@@ -394,48 +395,40 @@ export default function Builder({ onGoHome }: Props) {
               />
             </section>
 
+            <PersonalInfoForm
+              data={resumeData.personalInfo}
+              onChange={updatePersonalInfo}
+            />
+
+            <ExperienceForm
+              experiences={resumeData.experience}
+              onAdd={addExperience}
+              onUpdate={updateExperience}
+              onRemove={removeExperience}
+              onMove={moveExperience}
+            />
+
+            <EducationForm
+              education={resumeData.education}
+              onAdd={addEducation}
+              onUpdate={updateEducation}
+              onRemove={removeEducation}
+              onMove={moveEducation}
+            />
+
+            <SkillsForm
+              skills={resumeData.skills}
+              onAdd={addSkill}
+              onUpdate={updateSkill}
+              onRemove={removeSkill}
+              onMove={moveSkill}
+            />
+
             <PremiumSettings
               isPremium={isPremium}
               onActivate={() => { setIsPremium(true); toast.success('Premium activated!'); }}
               onDeactivate={() => setIsPremium(false)}
             />
-
-            <section aria-labelledby="personal-heading">
-              <PersonalInfoForm
-                data={resumeData.personalInfo}
-                onChange={updatePersonalInfo}
-              />
-            </section>
-
-            <section aria-labelledby="experience-heading">
-              <ExperienceForm
-                experiences={resumeData.experience}
-                onAdd={addExperience}
-                onUpdate={updateExperience}
-                onRemove={removeExperience}
-                onMove={moveExperience}
-              />
-            </section>
-
-            <section aria-labelledby="education-heading">
-              <EducationForm
-                education={resumeData.education}
-                onAdd={addEducation}
-                onUpdate={updateEducation}
-                onRemove={removeEducation}
-                onMove={moveEducation}
-              />
-            </section>
-
-            <section aria-labelledby="skills-heading">
-              <SkillsForm
-                skills={resumeData.skills}
-                onAdd={addSkill}
-                onUpdate={updateSkill}
-                onRemove={removeSkill}
-                onMove={moveSkill}
-              />
-            </section>
 
             <footer className="pb-4 text-center text-xs text-stone-500 dark:text-stone-500">
               <div className="flex items-center justify-center gap-2">
