@@ -1,5 +1,14 @@
 import { test, expect } from 'playwright/test';
 
+const SAMPLE_FULL_NAME = 'Jane Doe';
+
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    window.localStorage.clear();
+    window.sessionStorage.clear();
+  });
+});
+
 // ─── App Shell ────────────────────────────────────────────────
 
 test('App loads without errors', async ({ page }) => {
@@ -55,7 +64,7 @@ test('Builder loads with sample data pre-filled', async ({ page }) => {
   await page.getByRole('button', { name: /start editing/i }).click();
   await expect(page.getByLabel('Resume editor')).toBeVisible();
   // Sample data name should appear in the preview
-  await expect(page.locator('#resume-preview')).toContainText('Alexandra Chen');
+  await expect(page.locator('#resume-preview')).toContainText(SAMPLE_FULL_NAME);
 });
 
 test('Personal info form accepts input', async ({ page }) => {
@@ -73,7 +82,7 @@ test('Template selector switches between templates', async ({ page }) => {
   const modernBtn = page.getByRole('button', { name: 'Modern' });
   await modernBtn.click();
   // The preview should still contain the sample name
-  await expect(page.locator('#resume-preview')).toContainText('Alexandra Chen');
+  await expect(page.locator('#resume-preview')).toContainText(SAMPLE_FULL_NAME);
 });
 
 test('Add experience button creates a new entry', async ({ page }) => {

@@ -43,27 +43,27 @@ function ProductPreview() {
           <div className="h-7 w-16 rounded-md bg-cyan-700 dark:bg-cyan-400" />
         </div>
       </div>
-      <div className="grid min-h-[320px] grid-cols-1 overflow-hidden sm:min-h-[380px] md:grid-cols-[minmax(0,220px)_minmax(0,1fr)] lg:min-h-[420px]">
-        <div className="hidden min-w-0 border-r border-stone-300 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900 md:block">
-          <div className="rounded-lg border border-stone-300 p-3 dark:border-neutral-800">
+      <div className="grid min-h-[320px] grid-cols-1 overflow-hidden sm:min-h-[380px] md:grid-cols-[minmax(0,150px)_minmax(0,1fr)] lg:min-h-[460px]">
+        <div className="hidden min-w-0 border-r border-stone-300 bg-white p-3 dark:border-neutral-800 dark:bg-neutral-900 md:block">
+          <div className="rounded-lg border border-stone-300 p-2.5 dark:border-neutral-800">
             <div className="flex items-center justify-between gap-2">
               <div className="min-w-0">
-                <div className="h-2 w-16 rounded-full bg-cyan-700 dark:bg-cyan-400" />
-                <div className="mt-3 h-4 w-full max-w-36 rounded-full bg-stone-900 dark:bg-stone-100" />
+                <div className="h-1.5 w-12 rounded-full bg-cyan-700 dark:bg-cyan-400" />
+                <div className="mt-2 h-3 w-full max-w-24 rounded-full bg-stone-900 dark:bg-stone-100" />
               </div>
-              <div className="h-8 w-20 shrink-0 rounded-full bg-stone-200 dark:bg-neutral-800" />
+              <div className="h-6 w-14 shrink-0 rounded-full bg-stone-200 dark:bg-neutral-800" />
             </div>
-            <div className="mt-4 grid grid-cols-3 gap-2">
+            <div className="mt-3 grid grid-cols-3 gap-1.5">
               {[0, 1, 2].map(item => (
-                <div key={item} className="h-12 rounded-md border border-stone-200 bg-stone-50 dark:border-neutral-800 dark:bg-neutral-950" />
+                <div key={item} className="h-9 rounded-md border border-stone-200 bg-stone-50 dark:border-neutral-800 dark:bg-neutral-950" />
               ))}
             </div>
           </div>
-          <div className="mt-3 space-y-2">
+          <div className="mt-2.5 space-y-1.5">
             {[0, 1, 2].map(item => (
-              <div key={item} className="rounded-md border border-stone-200 bg-stone-50 p-2.5 dark:border-neutral-800 dark:bg-neutral-950">
-                <div className="h-2 w-20 rounded-full bg-stone-300 dark:bg-neutral-700" />
-                <div className="mt-2 h-7 rounded-md border border-stone-300 bg-white dark:border-neutral-700 dark:bg-neutral-900" />
+              <div key={item} className="rounded-md border border-stone-200 bg-stone-50 p-2 dark:border-neutral-800 dark:bg-neutral-950">
+                <div className="h-1.5 w-16 rounded-full bg-stone-300 dark:bg-neutral-700" />
+                <div className="mt-1.5 h-5 rounded-md border border-stone-300 bg-white dark:border-neutral-700 dark:bg-neutral-900" />
               </div>
             ))}
           </div>

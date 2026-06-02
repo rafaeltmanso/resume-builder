@@ -2,7 +2,7 @@ import type { ResumeData } from '../types/resume';
 
 export const sampleData: ResumeData = {
   personalInfo: {
-    fullName: 'Alexandra Chen',
+    fullName: 'Jane Doe',
     email: 'alex.chen@email.com',
     phone: '+1 (555) 123-4567',
     location: 'San Francisco, CA',
