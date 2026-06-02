@@ -166,6 +166,43 @@ test('Mobile viewport renders builder without horizontal scroll', async ({ page 
   expect(bodyWidth).toBeLessThanOrEqual(viewportWidth + 2);
 });
 
+// ─── Mobile Sticky Action Bar ──────────────────────────────
+
+test('Mobile action bar shows Preview button', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto('/');
+  await page.getByRole('button', { name: /start editing/i }).click();
+  const actionBar = page.getByRole('navigation', { name: /preview and export/i });
+  await expect(actionBar).toBeVisible();
+  await expect(actionBar.getByRole('button', { name: /^Preview$/ })).toBeVisible();
+});
+
+test('Mobile action bar shows PDF and HTML export controls', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto('/');
+  await page.getByRole('button', { name: /start editing/i }).click();
+  const actionBar = page.getByRole('navigation', { name: /preview and export/i });
+  await expect(actionBar.getByRole('button', { name: /pdf/i })).toBeVisible();
+  await expect(actionBar.getByRole('button', { name: /html/i })).toBeVisible();
+});
+
+test('Mobile action bar does not overlap form content', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto('/');
+  await page.getByRole('button', { name: /start editing/i }).click();
+  // Disable smooth scroll so the scroll is instant and the assertion isn't flaky
+  await page.addStyleTag({ content: 'html { scroll-behavior: auto !important; }' });
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  // The footer (last interactive form content) must be fully above the action bar — no overlap
+  const footerBox = await page.locator('footer').last().boundingBox();
+  const actionBarBox = await page
+    .getByRole('navigation', { name: /preview and export/i })
+    .boundingBox();
+  expect(footerBox).not.toBeNull();
+  expect(actionBarBox).not.toBeNull();
+  expect(footerBox!.y + footerBox!.height).toBeLessThanOrEqual(actionBarBox!.y + 1);
+});
+
 // ─── Performance / Accessibility ──────────────────────────────
 
 test('No console errors on app load', async ({ page }) => {
